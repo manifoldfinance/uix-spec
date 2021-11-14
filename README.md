@@ -104,357 +104,131 @@ token*name
     }
 ```
 
+## TypeScript
 
-```js
-module.exports = {
-    env: {
-        es6: true
-    },
-    parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module'
-    },
-    plugins: [
-        'import'
-    ],
+These guidelines are adapted from the TypeScript core's contributor coding guidelines.
 
-    settings: {
-        'import/resolver': {
-            node: {
-                extensions: ['.mjs', '.js', '.json']
-            }
-        },
-        'import/extensions': [
-            '.js',
-            '.mjs',
-            '.jsx',
-        ],
-        'import/core-modules': [],
-        'import/ignore': [
-            'node_modules',
-            '\\.(coffee|scss|css|less|hbs|svg|json)$',
-        ],
-    },
-
-    rules: {
-        // Static analysis:
-
-        // ensure imports point to files/modules that can be resolved
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-unresolved.md
-        'import/no-unresolved': ['error', {
-            commonjs: true,
-            caseSensitive: true
-        }],
-
-        // ensure named imports coupled with named exports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/named.md#when-not-to-use-it
-        'import/named': 'error',
-
-        // ensure default import coupled with default export
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/default.md#when-not-to-use-it
-        'import/default': 'off',
-
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/namespace.md
-        'import/namespace': 'off',
-
-        // Helpful warnings:
+* [Names](#names)
+* [Exports](#exports)
+* [Components](#components)
+* [Types](#types)
+* [`null` and `undefined`](#null-and-undefined)
+* [General Assumptions](#general-assumptions)
+* [Flags](#flags)
+* [Comments](#comments)
+* [Strings](#strings)
+* [When to use `any`](#when-to-use-any)
+* [Diagnostic Messages](#diagnostic-messages)
+* [General Constructs](#general-constructs)
+* [Style](#style)
 
 
-```js
-        // disallow invalid exports, e.g. multiple defaults
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/export.md
-        'import/export': 'error',
-```
+## Names
 
-```js
-        // do not allow a default import name to match a named export
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-named-as-default.md
-        'import/no-named-as-default': 'error',
-```
+1.  Use PascalCase for type names.
+2.  Do not use "I" as a prefix for interface names.
+3.  Use PascalCase for enum values.
+4.  Use camelCase for function names.
+5.  Use camelCase for property names and local variables.
+6.  Do not use "\_" as a prefix for private properties.
+7.  Use whole words in names when possible.
+8.  Use `isXXXing` or `hasXXXXed` for variables representing states of things (e.g. `isLoading`, `hasCompletedOnboarding`).
+9.  Give folders/files/components/functions unique names.
 
-```js
-        // warn on accessing default export property names that are also named exports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-named-as-default-member.md
-        'import/no-named-as-default-member': 'error',
-```
+## Exports
 
-```js
-        // disallow use of jsdoc-marked-deprecated imports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-deprecated.md
-        'import/no-deprecated': 'off',
-```
+1.  Only use named exports. The only exceptions are a tool requires default exports (e.g `React.lazy()`, Gatsby and Next.js `pages`, `typography.js`)
 
-```js
-        // Forbid the use of extraneous packages
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-extraneous-dependencies.md
-        // paths are treated both as absolute paths, and relative to process.cwd()
-        'import/no-extraneous-dependencies': ['error', {
-            devDependencies: [
-                'test/**', // tape, common npm pattern
-                'tests/**', // also common npm pattern
-                'spec/**', // mocha, rspec-like pattern
-                '**/__tests__/**', // jest pattern
-                '**/__mocks__/**', // jest pattern
-                'test.{js,jsx}', // repos with a single test file
-                'test-*.{js,jsx}', // repos with multiple top-level test files
-                '**/*{.,_}{test,spec}.{js,jsx}', // tests where the extension or filename suffix denotes that it is a test
-                '**/jest.config.js', // jest config
-                '**/jest.setup.js', // jest setup
-                '**/vue.config.js', // vue-cli config
-                '**/webpack.config.js', // webpack config
-                '**/webpack.config.*.js', // webpack config
-                '**/rollup.config.js', // rollup config
-                '**/rollup.config.*.js', // rollup config
-                '**/gulpfile.js', // gulp config
-                '**/gulpfile.*.js', // gulp config
-                '**/Gruntfile{,.js}', // grunt config
-                '**/protractor.conf.js', // protractor config
-                '**/protractor.conf.*.js', // protractor config
-                '**/karma.conf.js', // karma config
-                '**/.eslintrc.js' // eslint config
-            ],
-            optionalDependencies: false,
-        }],
-```
+## Components
+
+1.  1 file per logical component (e.g. parser, scanner, emitter, checker).
+2.  If not kept in a separate folder, files with ".generated.\*" suffix are auto-generated, do not hand-edit them.
+3.  Tests should be kept in the same directory with ".test.\*" suffix
+4.  Filename should match the component name. Interfaces for React components should be called `<ComponentName>Props` and `<ComponentName>State`. The only exception is when writing a render prop. In this situation, you, the author, should call the interface for your component's props `<ComponentName>Config` and then the render prop interface `<ComponentName>Props` so it is easy for everyone else to use.
+
+## Types
+
+1.  Do not export types/functions unless you need to share it across multiple components.
+2.  Do not introduce new types/values to the global namespace.
+3.  Shared types should be defined in 'types.ts'.
+4.  Within a file, type definitions should come first (after the imports).
+
+## `null` and `undefined`
+
+1.  Use **undefined**. Do not use `null`. EVER. If null is used (like in legacy Redux code), it should be kept isolated from other code with selectors.
+
+## General Assumptions
+
+1.  Consider objects like Nodes, Symbols, etc. as immutable outside the component that created them. Do not change them.
+2.  Consider arrays as immutable by default after creation.
+
+## Flags
+
+1.  More than 2 related Boolean properties on a type should be turned into a flag.
+
+## Comments
+
+1.  Use JSDoc style comments for functions, interfaces, enums, and classes.
+2.  **Document crazy stuff.** Always add `@see <url>` and the current date when referencing external resources, blog posts, tweets, snippets, gists, issues etc.
+3.  Make note conditions upon which hacks and smelly code can be removed.
+
+## Strings
+
+1.  Use single quotes for strings. Double quotes around JSX string props.
+2.  All strings visible to the user need to be localized (make an entry in diagnosticMessages.json).
+
+## When to use `any`
+
+1.  If something takes you longer than 10 minutes to type or you feel the need to read through TS Advanced Types docs, you should take a step back and ask for help, or use `any`.
+2.  Custom typings of 3rd-party modules should be added to a `.d.ts` file in a `typings` directory. Document the date and version of the module you are typing at the top of the file.
+3.  Consider rewriting tiny modules in typescript if types are too hard to think through.
+
+## Diagnostic Messages
+
+1.  Use a period at the end of a sentence.
+2.  Use indefinite articles for indefinite entities.
+3.  Definite entities should be named (this is for a variable name, type name, etc..).
+4.  When stating a rule, the subject should be in the singular (e.g. "An external module cannot..." instead of "External modules cannot...").
+5.  Use present tense.
+6.  Use active voice.
+
+## General Constructs
+
+For a variety of reasons, we avoid certain constructs, and use some of our own. Among them:
+
+1.  Do not use `for..in` statements; instead, use `ts.forEach`, `ts.forEachKey` and `ts.forEachValue`. Be aware of their slightly different semantics.
+2.  Try to use `ts.forEach`, `ts.map`, and `ts.filter` instead of loops when it is not strongly inconvenient.
+
+## Style
+
+0.  Use prettier and tslint/eslint.
+1.  Use arrow functions over anonymous function expressions.
+1.  Only surround arrow function parameters when necessary. <br />For example, `(x) => x + x` is wrong but the following are correct:
+    1.  `x => x + x`
+    2.  `(x,y) => x + y`
+    3.  `<T>(x: T, y: T) => x === y`
+1.  Always surround loop and conditional bodies with curly braces. Statements on the same line are allowed to omit braces.
+1.  Open curly braces always go on the same line as whatever necessitates them.
+1.  Parenthesized constructs should have no surrounding whitespace. <br />A single space follows commas, colons, and semicolons in those constructs. For example:
+    1.  `for (var i = 0, n = str.length; i < 10; i++) { }`
+    2.  `if (x < 10) { }`
+    3.  `function f(x: number, y: string): void { }`
+1.  Use a single declaration per variable statement <br />(i.e. use `var x = 1; var y = 2;` over `var x = 1, y = 2;`).
+1.  Use 2 spaces per indentation.
 
 
-        // Forbid mutable exports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-mutable-exports.md
-        'import/no-mutable-exports': 'error',
-```
-```js
-        // Module systems:
+## Reference Specification
 
-        // disallow require()
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-commonjs.md
-        'import/no-commonjs': 'off',
-```
-```js
-        // disallow AMD require/define
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-amd.md
-        'import/no-amd': 'error',
-```
-```js
-        // No Node.js builtin modules
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-nodejs-modules.md
-        // TODO: enable?
-        'import/no-nodejs-modules': 'off',
-```
+### System UI
 
-        // Style guide:
+> [System UI Theme Specification](https://system-ui.com]
 
-```js
-        // disallow non-import statements appearing before import statements
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/first.md
-        'import/first': 'error',
-```
-
-```js
-        // disallow non-import statements appearing before import statements
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/imports-first.md
-        // deprecated: use `import/first`
-        'import/imports-first': 'off',
-```
-```js
-        // disallow duplicate imports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-duplicates.md
-        'import/no-duplicates': 'error',
-```
-```js
-        // disallow namespace imports
-        // TODO: enable?
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-namespace.md
-        'import/no-namespace': 'off',
-```
-```js
-        // Ensure consistent use of file extension within the import path
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/extensions.md
-        'import/extensions': ['error', 'ignorePackages', {
-            js: 'never',
-            mjs: 'never',
-            jsx: 'never',
-        }],
-```
-```js
-        // ensure absolute imports are above relative imports and that unassigned imports are ignored
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/order.md
-        // TODO: enforce a stricter convention in module import order?
-        'import/order': ['error', {
-            groups: [
-                ['builtin', 'external', 'internal']
-            ]
-        }],
-```
-```js
-        // Require a newline after the last import/require in a group
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/newline-after-import.md
-        'import/newline-after-import': 'error',
-```
-```js
-        // Require modules with a single export to use a default export
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md
-        'import/prefer-default-export': 'error',
-```
-```js
-        // Restrict which files can be imported in a given folder
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-restricted-paths.md
-        'import/no-restricted-paths': 'off',
-```
-```js
-        // Forbid modules to have too many dependencies
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/max-dependencies.md
-        'import/max-dependencies': ['off', {
-            max: 10
-        }],
-```
-```js
-        // Forbid import of modules using absolute paths
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-absolute-path.md
-        'import/no-absolute-path': 'error',
-```
-```js
-        // Forbid require() calls with expressions
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-dynamic-require.md
-        'import/no-dynamic-require': 'error',
-```
-```js
-        // prevent importing the submodules of other modules
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-internal-modules.md
-        'import/no-internal-modules': ['off', {
-            allow: [],
-        }],
-```
-```js
-        // Warn if a module could be mistakenly parsed as a script by a consumer
-        // leveraging Unambiguous JavaScript Grammar
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/unambiguous.md
-        // this should not be enabled until this proposal has at least been *presented* to TC39.
-        // At the moment, it's not a thing.
-        'import/unambiguous': 'off',
-```
-```js
-        // Forbid Webpack loader syntax in imports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-webpack-loader-syntax.md
-        'import/no-webpack-loader-syntax': 'error',
-```
-```js
-        // Prevent unassigned imports
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-unassigned-import.md
-        // importing for side effects is perfectly acceptable, if you need side effects.
-        'import/no-unassigned-import': 'off',
-```
-```js
-        // Prevent importing the default as if it were named
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-named-default.md
-        'import/no-named-default': 'error',
-```
-```js
-        // Reports if a module's default export is unnamed
-        // https://github.com/benmosher/eslint-plugin-import/blob/d9b712ac7fd1fddc391f7b234827925c160d956f/docs/rules/no-anonymous-default-export.md
-        'import/no-anonymous-default-export': ['off', {
-            allowArray: false,
-            allowArrowFunction: false,
-            allowAnonymousClass: false,
-            allowAnonymousFunction: false,
-            allowLiteral: false,
-            allowObject: false,
-        }],
-```
-```js
-        // This rule enforces that all exports are declared at the bottom of the file.
-        // https://github.com/benmosher/eslint-plugin-import/blob/98acd6afd04dcb6920b81330114e146dc8532ea4/docs/rules/exports-last.md
-        // TODO: enable?
-        'import/exports-last': 'off',
-```
-```js
-        // Reports when named exports are not grouped together in a single export declaration
-        // or when multiple assignments to CommonJS module.exports or exports object are present
-        // in a single file.
-        // https://github.com/benmosher/eslint-plugin-import/blob/44a038c06487964394b1e15b64f3bd34e5d40cde/docs/rules/group-exports.md
-        'import/group-exports': 'off',
-```
-```js
-        // forbid default exports. this is a terrible rule, do not use it.
-        // https://github.com/benmosher/eslint-plugin-import/blob/44a038c06487964394b1e15b64f3bd34e5d40cde/docs/rules/no-default-export.md
-        'import/no-default-export': 'off',
-```
-```js
-        // Prohibit named exports. this is a terrible rule, do not use it.
-        // https://github.com/benmosher/eslint-plugin-import/blob/1ec80fa35fa1819e2d35a70e68fb6a149fb57c5e/docs/rules/no-named-export.md
-        'import/no-named-export': 'off',
-```
-```js
-        // Forbid a module from importing itself
-        // https://github.com/benmosher/eslint-plugin-import/blob/44a038c06487964394b1e15b64f3bd34e5d40cde/docs/rules/no-self-import.md
-        'import/no-self-import': 'error',
-```
-```js
-        // Forbid cyclical dependencies between modules
-        // https://github.com/benmosher/eslint-plugin-import/blob/d81f48a2506182738409805f5272eff4d77c9348/docs/rules/no-cycle.md
-        'import/no-cycle': ['error', {
-            maxDepth: '∞'
-        }],
-```
-```js
-        // Ensures that there are no useless path segments
-        // https://github.com/benmosher/eslint-plugin-import/blob/ebafcbf59ec9f653b2ac2a0156ca3bcba0a7cf57/docs/rules/no-useless-path-segments.md
-        'import/no-useless-path-segments': ['error', {
-            commonjs: true
-        }],
-```
-```js
-        // dynamic imports require a leading comment with a webpackChunkName
-        // https://github.com/benmosher/eslint-plugin-import/blob/ebafcbf59ec9f653b2ac2a0156ca3bcba0a7cf57/docs/rules/dynamic-import-chunkname.md
-        'import/dynamic-import-chunkname': ['off', {
-            importFunctions: [],
-            webpackChunknameFormat: '[0-9a-zA-Z-_/.]+',
-        }],
-```
-```js
-        // Use this rule to prevent imports to folders in relative parent paths.
-        // https://github.com/benmosher/eslint-plugin-import/blob/c34f14f67f077acd5a61b3da9c0b0de298d20059/docs/rules/no-relative-parent-imports.md
-        'import/no-relative-parent-imports': 'off',
-```
-```js
-        // Reports modules without any exports, or with unused exports
-        // https://github.com/benmosher/eslint-plugin-import/blob/f63dd261809de6883b13b6b5b960e6d7f42a7813/docs/rules/no-unused-modules.md
-        // TODO: enable once it supports CJS
-        'import/no-unused-modules': ['off', {
-            ignoreExports: [],
-            missingExports: true,
-            unusedExports: true,
-        }],
-```
-```js
-        // Reports the use of import declarations with CommonJS exports in any module except for the main module.
-        // https://github.com/benmosher/eslint-plugin-import/blob/1012eb951767279ce3b540a4ec4f29236104bb5b/docs/rules/no-import-module-exports.md
-        'import/no-import-module-exports': ['error', {
-            exceptions: [],
-        }],
-```
-```js
-        // Use this rule to prevent importing packages through relative paths.
-        // https://github.com/benmosher/eslint-plugin-import/blob/1012eb951767279ce3b540a4ec4f29236104bb5b/docs/rules/no-relative-packages.md
-        'import/no-relative-packages': 'error',
-    },
-};
-```
-
-## System UI
-
-# System UI Theme Specification
-
-https://system-ui.com
-
-> This specification is a work-in-progress. Please see the related [issue][] for more.
-
-[issue]: https://github.com/system-ui/theme-specification/issues/1
 
 The theme object is intended to be a general purpose format for storing design system style values, scales, and/or design tokens.
 The object itself is not coupled to any particular library's implementation and can be used
 in places where sharing common style values in multiple parts of a code base is desirable.
 
-## Scale Objects
+#### Scale Objects
 
 Many CSS style properties accept open-ended values like lengths, colors, and font names.
 In order to create a consistent styling system, the theme object is centered around the idea of scales,
@@ -490,7 +264,7 @@ colors: {
 }
 ```
 
-### Scale Aliases
+#### Scale Aliases
 
 For typically ordinal values like font sizes that are stored in arrays, it can be helpful to create aliases by adding named properties to the object.
 
@@ -504,14 +278,14 @@ fontSizes.body = fontSizes[2]
 fontSizes.display = fontSizes[5]
 ```
 
-### Excluded Values
+#### Excluded Values
 
 Some CSS properties accept only a small, finite number of valid CSS values and should *not* be included as a scale object.
 For example, the `text-align` property accepts the following values:
 `left`, `right`, `center`, `justify`, `justify-all`, `start`, `end`, or `match-parent`.
 Other properties that are intentionally excluded from this specification include: `float`, `clear`, `display`, `overflow`, `position`, `vertical-align`, `align-items`, `justify-content`, and `flex-direction`.
 
-## Keys
+### Keys
 
 The keys in the theme object should typically correspond with the CSS properties they are used for, and follow a plural naming convention.
 For example, the CSS property `font-size` is expected to use values from the `fontSizes` scale, and the `color` property uses values from the `colors` scale.
@@ -520,7 +294,7 @@ Some keys can be used for multiple CSS properties, where the data type is the sa
 The `color` object is intended to be used with any property that accepts a CSS color value, such as `background-color` or `border-color`.
 
 
-### Space
+#### Space
 
 The `space` key is a specially-named scale intended for use with margin, padding, and other layout-related CSS properties.
 A space scale can be defined as either a plain object or an array, but by convention an array is preferred.
