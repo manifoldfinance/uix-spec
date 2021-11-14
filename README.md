@@ -1,15 +1,44 @@
 ---
-title: Design Specification
-version: v0.1.1
+title: UI/x Design Decision Records and Specification
+version: v0.2.0
 summary:  Design Specification for UI/UX practices
 license: Apache-2.0 / CC-2.5 SA
 ---
 
-# Conventions
+# UI/x - Design Decision Records
 
-- Naming Conventions
-- Naming Components
-- Reference to System UI
+> Engineering and Design Practices
+
+- [Conventions](#conventions)
+  * [Naming Convention](#naming-convention)
+  * [Naming Components](#naming-components)
+  * [Class vs `React.createClass` vs stateless](#class-vs--reactcreateclass--vs-stateless)
+  * [TypeScript](#typescript)
+  * [Names](#names)
+  * [Exports](#exports)
+  * [Components](#components)
+  * [Types](#types)
+  * [`null` and `undefined`](#-null--and--undefined-)
+  * [General Assumptions](#general-assumptions)
+  * [Flags](#flags)
+  * [Comments](#comments)
+  * [Strings](#strings)
+  * [When to use `any`](#when-to-use--any-)
+  * [Diagnostic Messages](#diagnostic-messages)
+  * [General Constructs](#general-constructs)
+  * [Style](#style)
+  * [Reference Specification](#reference-specification)
+    + [System UI](#system-ui)
+      - [Scale Objects](#scale-objects)
+      - [Scale Aliases](#scale-aliases)
+      - [Excluded Values](#excluded-values)
+    + [Keys](#keys)
+      - [Space](#space)
+    + [Breakpoints](#breakpoints)
+      - [Media Queries](#media-queries)
+    + [Key Reference](#key-reference)
+    + [Prior Art](#prior-art)
+
 
 ## Naming Convention
 
