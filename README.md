@@ -1,6 +1,6 @@
 ---
 title: UI/x Design Decision Records and Specification
-version: v0.2.0
+version: v0.3.0
 summary:  Design Specification for UI/UX practices
 license: Apache-2.0 / CC-2.5 SA
 ---
@@ -9,35 +9,171 @@ license: Apache-2.0 / CC-2.5 SA
 
 > Engineering and Design Practices
 
-- [Conventions](#conventions)
-  * [Naming Convention](#naming-convention)
-  * [Naming Components](#naming-components)
-  * [Class vs `React.createClass` vs stateless](#class-vs--reactcreateclass--vs-stateless)
-  * [TypeScript](#typescript)
-  * [Names](#names)
-  * [Exports](#exports)
-  * [Components](#components)
-  * [Types](#types)
-  * [`null` and `undefined`](#-null--and--undefined-)
-  * [General Assumptions](#general-assumptions)
-  * [Flags](#flags)
-  * [Comments](#comments)
-  * [Strings](#strings)
-  * [When to use `any`](#when-to-use--any-)
-  * [Diagnostic Messages](#diagnostic-messages)
-  * [General Constructs](#general-constructs)
-  * [Style](#style)
-  * [Reference Specification](#reference-specification)
-    + [System UI](#system-ui)
-      - [Scale Objects](#scale-objects)
-      - [Scale Aliases](#scale-aliases)
-      - [Excluded Values](#excluded-values)
-    + [Keys](#keys)
-      - [Space](#space)
-    + [Breakpoints](#breakpoints)
-      - [Media Queries](#media-queries)
-    + [Key Reference](#key-reference)
-    + [Prior Art](#prior-art)
+- [Conformance](#conformance)
+  * [Prettier](#prettier)
+    + [whitespace](#whitespace)
+    + [arrow-parens](#arrow-parens)
+    + [comma-dangle](#202-additional-trailing-comma--yup-eslint--comma-dangle)
+    + [implicit-arrow-linebreak](#86-enforce-the-location-of-arrow-function-bodies-with-implicit-returns-eslint--implicit-arrow-linebreak)
+- [Naming Convention](#naming-convention)
+- [Naming Components](#naming-components)
+- [Class vs `React.createClass` vs stateless](#class-vs--reactcreateclass--vs-stateless)
+- [TypeScript](#typescript)
+- [Names](#names)
+- [Exports](#exports)
+- [Components](#components)
+- [Types](#types)
+- [`null` and `undefined`](#-null--and--undefined-)
+- [General Assumptions](#general-assumptions)
+- [Flags](#flags)
+- [Comments](#comments)
+- [Strings](#strings)
+- [When to use `any`](#when-to-use--any-)
+- [Diagnostic Messages](#diagnostic-messages)
+- [General Constructs](#general-constructs)
+- [Style](#style)
+- [Reference Specification](#reference-specification)
+  * [System UI](#system-ui)
+    + [Scale Objects](#scale-objects)
+    + [Scale Aliases](#scale-aliases)
+    + [Excluded Values](#excluded-values)
+  * [Keys](#keys)
+    + [Space](#space)
+  * [Breakpoints](#breakpoints)
+    + [Media Queries](#media-queries)
+  * [Key Reference](#key-reference)
+  * [Prior Art](#prior-art)
+
+
+## Conformance
+
+Conformance objectives are to reduce AST diff churn and improve developer experience
+
+### Prettier 
+
+### whitespace
+
+[source@airbnb/javascript#whitespace--in-braces](https://github.com/airbnb/javascript#whitespace--in-braces)
+
+- 19.12 Add spaces inside curly braces. eslint: object-curly-spacing
+
+```jsx
+// bad
+const foo = { clark: 'kent' };
+
+// good
+const foo = { clark: 'kent' };
+```
+
+#### arrow-parens
+
+- 8.4 Always include parentheses around arguments for clarity and consistency.
+  eslint: arrow-parens
+
+[source@airbnb/javascript#arrows--one-arg-parens](https://github.com/airbnb/javascript#arrows--one-arg-parens)
+
+> Why? Minimizes diff churn when adding or removing arguments.
+
+```jsx
+// bad
+[1, 2, 3].map((x) => x * x);
+
+// good
+[1, 2, 3].map((x) => x * x);
+
+// bad
+[1, 2, 3].map(
+  (number) =>
+    `A long string with the ${number}. It’s so long that we don’t want it to take up space on the .map line!`,
+);
+
+// good
+[1, 2, 3].map(
+  (number) =>
+    `A long string with the ${number}. It’s so long that we don’t want it to take up space on the .map line!`,
+);
+
+// bad
+[1, 2, 3].map((x) => {
+  const y = x + 1;
+  return x * y;
+});
+
+// good
+[1, 2, 3].map((x) => {
+  const y = x + 1;
+  return x * y;
+});
+```
+
+##### one var
+
+- 13.2 Use one const or let declaration per variable or assignment. eslint:
+  one-var
+
+> Why? It’s easier to add new variable declarations this way, and you never have
+> to worry about swapping out a ; for a , or introducing punctuation-only diffs.
+> You can also step through each declaration with the debugger, instead of
+> jumping through all of them at once.
+
+##### [ref:eslint/rules/one-var](https://eslint.org/docs/rules/one-var)
+
+```jsx
+// bad
+const items = getItems(),
+  goSportsTeam = true,
+  dragonball = 'z';
+
+// bad
+// (compare to above, and try to spot the mistake)
+const items = getItems(),
+  goSportsTeam = true;
+dragonball = 'z';
+
+// good
+const items = getItems();
+const goSportsTeam = true;
+const dragonball = 'z';
+```
+
+#### comma-dangle
+
+> 20.2 Additional trailing comma: Yup. eslint: 
+
+    Why? This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code which means you don’t have to worry about the trailing comma problem in legacy browsers.
+
+```diff
+// bad - git diff without trailing comma
+const hero = {
+     firstName: 'Florence',
+-    lastName: 'Nightingale'
++    lastName: 'Nightingale',
++    inventorOf: ['coxcomb chart', 'modern nursing']
+};
+
+// good - git diff with trailing comma
+const hero = {
+     firstName: 'Florence',
+     lastName: 'Nightingale',
++    inventorOf: ['coxcomb chart', 'modern nursing'],
+};
+```
+
+#### implicit-arrow-linebreak
+
+Enforce the location of arrow function bodies with implicit returns. eslint: 
+
+```js
+// bad
+(foo) => bar;
+
+(foo) => bar;
+
+// good
+(foo) => bar;
+(foo) => bar;
+(foo) => bar;
+```
 
 
 ## Naming Convention
