@@ -7,6 +7,50 @@ license: Apache-2.0 / CC-2.5 SA
 
 # UI/x - Design Decision Records
 
+
+
+# disco3 -                                                               a web3 engineering and design system
+> State is the root of all revenue.
+
+User interface development tools are very powerful. They can be used to construct large and complex user interfaces, with only a relatively small amount of code written by an application developer. And yet, despite the power of such tools and the relatively small amount of code that is written, user interface software often has the following characteristics:
+
+-   the code can be difficult to understand and review thoroughly:
+-   the code can be difficult to test in a systematic and thorough way;
+-   the code can contain bugs even after extensive testing and bug fixing;
+-   the code can be difficult to enhance without introducing unwanted side-effects;
+-   the quality of the code tends to deteriorate as enhancements are made to it.
+
+Despite the obvious problems associated with user interface development, **little effort has been made to improve the situation**. Any practitioner who has worked on large user interface projects will be familiar with many of the above characteristics, which are **symptomatic of the way in which the software is constructed**.
+
+
+## Structure
+
+### Feature folders
+
+**Don't** _just_ have a folder named `components` and throw everything in there.
+
+**Do** have a folder named `features` where each sub-folder is a specific feature containing all the files related to that feature.
+
+ Use feature folders to identify boundaries in your system.
+ 
+ ## [The principle](https://kentcdodds.com/blog/colocation#the-principle)
+
+**The concept of co-location can be boiled down to this fundamental principle:**
+
+Place code as close to where it's relevant as possible
+
+You might also say: "Things that change together should be located as close as reasonable." ([Dan Abramov](https://twitter.com/dan_abramov)
+
+
+## Testing
+-   **Integration**: Verify that several units work together in harmony.
+-   **Unit**: Verify that individual, isolated parts work as expected.
+-   **Static**: Catch typos and type errors as you write the code.
+
+
+
+### Conformance: Configurations for linting, etc 
+
 > Engineering and Design Practices
 
 - [Conformance](#conformance)
