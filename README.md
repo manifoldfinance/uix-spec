@@ -11,7 +11,7 @@ license: Apache-2.0 / CC-2.5 SA
 
 # disco3 -                                                               a web3 engineering and design system
 > State is the root of all revenue.
-
+## Motivation
 User interface development tools are very powerful. They can be used to construct large and complex user interfaces, with only a relatively small amount of code written by an application developer. And yet, despite the power of such tools and the relatively small amount of code that is written, user interface software often has the following characteristics:
 
 -   the code can be difficult to understand and review thoroughly:
@@ -21,6 +21,9 @@ User interface development tools are very powerful. They can be used to construc
 -   the quality of the code tends to deteriorate as enhancements are made to it.
 
 Despite the obvious problems associated with user interface development, **little effort has been made to improve the situation**. Any practitioner who has worked on large user interface projects will be familiar with many of the above characteristics, which are **symptomatic of the way in which the software is constructed**.
+
+### Bad UI/UX can cost big
+UI issue causes Citibank to accidentally pay off its insolvent client's $900M loan.  <https://bloomberg.com/opinion/articles/2021-02-17/citi-can-t-have-its-900-million-back> (accessed, 2021.12.20)
 
 
 ## Structure
