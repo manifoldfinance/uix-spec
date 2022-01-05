@@ -50,7 +50,32 @@ You might also say: "Things that change together should be located as close as r
 -   **Unit**: Verify that individual, isolated parts work as expected.
 -   **Static**: Catch typos and type errors as you write the code.
 
+## Heuristics
 
+[heuristic](<https://en.wikipedia.org/wiki/Heuristic_(computer_science)>)
+/ˌhjʊ(ə)ˈrɪstɪk/
+
+> A technique designed for solving a problem more quickly when classic methods are too slow, or for finding an approximate solution when classic methods fail to find any exact solution
+
+- Priority is the best User Experience
+- Complexity should be introduced when it’s inevitable
+- Code should be easy to reason about
+- Code should be easy to delete
+- Avoid abstracting too early
+- Avoid thinking too far in the future
+
+
+- **Brevity** vs Verbosity
+- ****Macro**** vs Micro
+- **Transparency** vs Abstraction
+- **Idioms** vs Libraries
+- **Data** vs Control Flow
+- **Structure** vs Names
+- **Implicit** vs Explicit
+- **Syntax** vs Semantics
+
+
+## Remote Complexity	 vs  Local Complexity
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
