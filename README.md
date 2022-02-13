@@ -1,17 +1,33 @@
+| title:   	| disco: distributed computing aesthetic and critique 	|
+|----------	|-----------------------------------------------------	|
+| version: 	| 2022.02                                             	|
+| summary: 	| distributed computing: a design framework           	|
+| license: 	| Apache-2.0 / CC-2.5 SA                              	|
+
+
 ---
-title: UI/x Design Decision Records and Specification
-version: v0.3.0
-summary:  Design Specification for UI/UX practices
-license: Apache-2.0 / CC-2.5 SA
----
-
-# UI/x - Design Decision Records
 
 
+# disco -                                                               a web3 engineering and design system
 
-# disco3 -                                                               a web3 engineering and design system
+
 > State is the root of all revenue.
-## Motivation
+
+
+
+
+<br />
+
+
+## abstract
+
+
+> [abstract]: 
+> we present an engineering focused aesthetic for a novel design framework: disco. disco's is a web3 focused UI/UX framework that is built to enable, provide and reinforce *trust* in the underlying process (both the activity and the application they are using itself). By communicating to the end user directly and indirectly we hope to significatly reduce user error prone mistakes 
+
+
+## motivation
+
 User interface development tools are very powerful. They can be used to construct large and complex user interfaces, with only a relatively small amount of code written by an application developer. And yet, despite the power of such tools and the relatively small amount of code that is written, user interface software often has the following characteristics:
 
 -   the code can be difficult to understand and review thoroughly:
@@ -22,13 +38,35 @@ User interface development tools are very powerful. They can be used to construc
 
 Despite the obvious problems associated with user interface development, **little effort has been made to improve the situation**. Any practitioner who has worked on large user interface projects will be familiar with many of the above characteristics, which are **symptomatic of the way in which the software is constructed**.
 
-### Bad UI/UX can cost big
-UI issue causes Citibank to accidentally pay off its insolvent client's $900M loan.  <https://bloomberg.com/opinion/articles/2021-02-17/citi-can-t-have-its-900-million-back> (accessed, 2021.12.20)
+
+### Principles for Transactions
+
+[UX/UI] Manage transaction wait time. Clarify blockchain specific times and manage user’s wait in various phases and feedback.
+[UX/UI] Within the context of an individual, adapt to progressively increase/decrease the amount of new lingo and specific concepts that they need to learn and are exposed to. never combine expert-level blockchain-specific lingo with the need-to-know basics when acting within the same context of an individual; create tiers of knowledge levels. You can show an expert the basics, but never the other way around.
+[UX/UI] Use a consistent visual language to dictate addresses. use human-readable deterministic visual representation of the hash (i.e. Identicons, Blockies et al.) when possible. allow users to expand the full address/hash and copy.
+[UX/UI] Apply relevance to interrupting messages only for information relevant to the current user.
+[UX/UI] Clarify which data comes from the blockchain and which doesn’t.
+[UX/UI] Types of transactions i.e. value transfers, function calls, contract generating.
+[UX/UI] When a blockchain event aborts or otherwise fails to complete as expected, the fallback must remain functional with resulting blockchain state clear.
+[UX/UI] Allow users to subscribe-to, unsubscribe-from or temporarily mute certain events.
+[UX/UI] Errors MUST populate back to the user.
+[UX/UI] Budget performance and response time so that stallouts or failovers can be approximated in worse-case
 
 
-## Structure
+#### Example: Bad UI/UX can cost big
+UI issue causes Citibank to accidentally pay off its insolvent client's $900M loan.  
 
-### Feature folders
+ <https://bloomberg.com/opinion/articles/2021-02-17/citi-can-t-have-its-900-million-back> (accessed, 2021.12.20)
+
+
+---
+
+
+## UI/X - Design Decision Records
+
+#### Structure
+
+#### Feature folders
 
 **Don't** _just_ have a folder named `components` and throw everything in there.
 
@@ -36,7 +74,7 @@ UI issue causes Citibank to accidentally pay off its insolvent client's $900M lo
 
  Use feature folders to identify boundaries in your system.
  
- ## [The principle](https://kentcdodds.com/blog/colocation#the-principle)
+ ### [The principle](https://kentcdodds.com/blog/colocation#the-principle)
 
 **The concept of co-location can be boiled down to this fundamental principle:**
 
@@ -45,12 +83,12 @@ Place code as close to where it's relevant as possible
 You might also say: "Things that change together should be located as close as reasonable." ([Dan Abramov](https://twitter.com/dan_abramov)
 
 
-## Testing
+### Testing
 -   **Integration**: Verify that several units work together in harmony.
 -   **Unit**: Verify that individual, isolated parts work as expected.
 -   **Static**: Catch typos and type errors as you write the code.
 
-## Heuristics
+### Heuristics
 
 [heuristic](<https://en.wikipedia.org/wiki/Heuristic_(computer_science)>)
 /ˌhjʊ(ə)ˈrɪstɪk/
