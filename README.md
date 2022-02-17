@@ -184,6 +184,21 @@ const { styled } = createCss({
 ```
 -->
 
+## Choosing semantic color cales
+
+For most projects, you will need colors to communicate semantic meaning. Here are some common pairings that work well in Western culture.
+
+
+- Error: Red/Tomato/Crimson
+
+- Success: Teal/Green/Grass/Mint
+
+- Warning: Yellow/Amber
+
+- Info: Blue/Sky/Cyan
+
+In many cases, you might eventually need most of the scales, for one reason or another. Your app may support multiplayer mode, where you assign a color to each user. Your app may have a labelling feature, where your users assign a color to a task. Your app may use badges to communicate "pending" or "rejected" states.
+
 
 
 ### Structure
