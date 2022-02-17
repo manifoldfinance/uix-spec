@@ -41,14 +41,14 @@ Despite the obvious problems associated with user interface development, **littl
 
 ### Principles for Transactions
 
-[UX/UI] Manage transaction wait time. Clarify blockchain specific times and manage user’s wait in various phases and feedback.
-[UX/UI] Within the context of an individual, adapt to progressively increase/decrease the amount of new lingo and specific concepts that they need to learn and are exposed to. never combine expert-level blockchain-specific lingo with the need-to-know basics when acting within the same context of an individual; create tiers of knowledge levels. You can show an expert the basics, but never the other way around.
-[UX/UI] Use a consistent visual language to dictate addresses. use human-readable deterministic visual representation of the hash (i.e. Identicons, Blockies et al.) when possible. allow users to expand the full address/hash and copy.
-[UX/UI] Apply relevance to interrupting messages only for information relevant to the current user.
-[UX/UI] Clarify which data comes from the blockchain and which doesn’t.
-[UX/UI] Types of transactions i.e. value transfers, function calls, contract generating.
-[UX/UI] When a blockchain event aborts or otherwise fails to complete as expected, the fallback must remain functional with resulting blockchain state clear.
-[UX/UI] Allow users to subscribe-to, unsubscribe-from or temporarily mute certain events.
+[UX/UI] Manage transaction wait time. Clarify blockchain specific times and manage user’s wait in various phases and feedback. <br>
+[UX/UI] Within the context of an individual, adapt to progressively increase/decrease the amount of new lingo and specific concepts that they need to learn and are exposed to. never combine expert-level blockchain-specific lingo with the need-to-know basics when acting within the same context of an individual; create tiers of knowledge levels. You can show an expert the basics, but never the other way around. <br>
+[UX/UI] Use a consistent visual language to dictate addresses. use human-readable deterministic visual representation of the hash (i.e. Identicons, Blockies et al.) when possible. allow users to expand the full address/hash and copy. <br>
+[UX/UI] Apply relevance to interrupting messages only for information relevant to the current user. <br>
+[UX/UI] Clarify which data comes from the blockchain and which doesn’t. <br>
+[UX/UI] Types of transactions i.e. value transfers, function calls, contract generating. <br>
+[UX/UI] When a blockchain event aborts or otherwise fails to complete as expected, the fallback must remain functional with resulting blockchain state clear. <br>
+[UX/UI] Allow users to subscribe-to, unsubscribe-from or temporarily mute certain events. <br>
 [UX/UI] Errors MUST populate back to the user.
 [UX/UI] Budget performance and response time so that stallouts or failovers can be approximated in worse-case
 
@@ -64,7 +64,144 @@ UI issue causes Citibank to accidentally pay off its insolvent client's $900M lo
 
 ## UI/X - Design Decision Records
 
-#### Structure
+
+## Colors - Semantic Aliases
+
+A guide to providing semantic aliases for colors.
+
+Referencing color scales by their actual scale name can work well, like `blue` and `red`.
+But often, creating semantic aliases like `accent`, `primary`, `neutral`, or `brand` can be helpful, especially when it comes to theming.
+
+
+#### Bad Color Aliasing
+
+```css
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/blue.css';
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/green.css';
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/yellow.css';
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/red.css';
+
+:root {
+  --accent1: var(--blue1);
+  --accent2: var(--blue2);
+  --accent3: var(--blue3);
+  --accent4: var(--blue4);
+  --accent5: var(--blue5);
+  --accent6: var(--blue6);
+  --accent7: var(--blue7);
+  --accent8: var(--blue8);
+  --accent9: var(--blue9);
+  --accent10: var(--blue10);
+  --accent11: var(--blue11);
+  --accent12: var(--blue12);
+
+  --success1: var(--green1);
+  --success2: var(--green2);
+  /* repeat for all steps */
+
+  --warning1: var(--yellow1);
+  --warning2: var(--yellow2);
+  /* repeat for all steps */
+
+  --danger1: var(--red1);
+  --danger2: var(--red2);
+  /* repeat for all steps */
+}
+```
+
+## Why Color Alias Matters
+
+With this approach, you will likely run into issues where you need to use the same scale for multiple semantics. Common examples include:
+
+-   If you map `yellow` to "**warning**", you might also need `yellow` to communicate "**pending**".
+    
+-   If you map `red` to "danger", you might also need `red` to communicate "error" or "rejected".
+    
+-   If you map `green` to "success", you might also need `green` to communicate "valid".
+    
+-   If you map `blue` to "accent", you might also need `blue` to communicate "info".
+    
+
+> 💡 In this scenario, you can choose to define multiple semantic aliases which map to the same scale.
+
+#### Good Color Alias 
+
+```css
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/blue.css';
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/green.css';
+@import 'https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/yellow.css';
+
+:root {
+  --accent1: var(--blue1);
+  --accent2: var(--blue2);
+  --info1: var(--blue1);
+  --info2: var(--blue2);
+
+  --success1: var(--green1);
+  --success2: var(--green2);
+  --valid1: var(--green1);
+  --valid2: var(--green2);
+
+  --warning1: var(--yellow1);
+  --warning2: var(--yellow2);
+  --pending1: var(--yellow1);
+  --pending2: var(--yellow2);
+}
+
+```
+
+
+<!-- 
+```ts
+import { createCss } from '@stitches/react';
+import {
+  blue,
+  green,
+  yellow,
+  red
+} from '@radix-ui/colors';
+const { styled } = createCss({
+  theme: {
+    colors: {
+...blue,
+...green,
+...yellow,
+      accent1: '$blue1',
+      accent2: '$blue2',
+      info1: '$blue1',
+      info2: '$blue2',
+      success1: '$green1',
+      success2: '$green2',
+      valid1: '$green1',
+      valid2: '$green2',
+      warning1: '$yellow1',
+      warning2: '$yellow2',
+      pending1: '$yellow1',
+      pending2: '$yellow2',
+},
+},
+});
+```
+-->
+
+## Choosing semantic color cales
+
+For most projects, you will need colors to communicate semantic meaning. Here are some common pairings that work well in Western culture.
+
+
+- Error: Red/Tomato/Crimson
+
+- Success: Teal/Green/Grass/Mint
+
+- Warning: Yellow/Amber
+
+- Info: Blue/Sky/Cyan
+
+In many cases, you might eventually need most of the scales, for one reason or another. Your app may support multiplayer mode, where you assign a color to each user. Your app may have a labelling feature, where your users assign a color to a task. Your app may use badges to communicate "pending" or "rejected" states.
+
+
+
+### Structure
 
 #### Feature folders
 
