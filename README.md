@@ -1,22 +1,99 @@
 | title:   	| disco: distributed computing aesthetic and critique 	|
 |----------	|-----------------------------------------------------	|
-| version: 	| 2022.02                                             	|
-| summary: 	| distributed computing: a design framework           	|
+| version: 	| 2022.06:0.3.0                                       	|
+| summary: 	| distributed computing (disco): a design guideline   	|
 | license: 	| Apache-2.0 / CC-2.5 SA                              	|
 
 
 ---
 
-
-# disco -                                                               a web3 engineering and design system
-
-
-> State is the root of all revenue.
+ 
 
 
+# disco3                                                               
+> .. a web3 engineering and design system
 
+
+
+[![telegram](https://img.shields.io/badge/telegram-blue?logo=telegram)]( https://t.me/manifoldfinance)
+[![spdx](https://img.shields.io/badge/spdx-CC--2.5%20SA-blue)](#)
 
 <br />
+
+<details><summary>Table of Contents </summary>
+ 
+- [disco - a web3 engineering and design system](#)
+  * [abstract](#abstract)
+  * [motivation](#motivation)
+    + [Principles for Transactions](#principles-for-transactions)
+      - [Example: Bad UI/UX can cost big](#example--bad-ui-ux-can-cost-big)
+  * [UI/X - Design Decision Records](#ui-x---design-decision-records)
+  * [Colors - Semantic Aliases](#colors---semantic-aliases)
+      - [Bad Color Aliasing](#bad-color-aliasing)
+  * [Why Color Alias Matters](#why-color-alias-matters)
+      - [Good Color Alias](#good-color-alias)
+  * [Choosing semantic color cales](#choosing-semantic-color-cales)
+    + [Structure](#structure)
+      - [Feature folders](#feature-folders)
+    + [[The principle](https://kentcdodds.com/blog/colocation#the-principle)](#-the-principle--https---kentcdoddscom-blog-colocation-the-principle-)
+    + [Testing](#testing)
+    + [Heuristics](#heuristics)
+  * [Remote Complexity     vs  Local Complexity](#remote-complexity-----vs--local-complexity)
+  * [Table of Contents](#table-of-contents)
+- [Antipatterns](#antipatterns)
+  * [Strict email validation](#strict-email-validation)
+  * [Late returns](#late-returns)
+  * [Hacks comment](#hacks-comment)
+  * [Repeating arguments in function name](#repeating-arguments-in-function-name)
+  * [Repeating class name in method name](#repeating-class-name-in-method-name)
+  * [Repeating function name in docstring](#repeating-function-name-in-docstring)
+  * [Unreadable response construction](#unreadable-response-construction)
+  * [Non Deterministic tests](#undeterministic-tests)
+  * [Unbalanced boilerplate](#unbalanced-boilerplate)
+  * [Inconsistent use of verbs in functions](#inconsistent-use-of-verbs-in-functions)
+  * [Opaque function arguments](#opaque-function-arguments)
+  * [Hiding formatting](#hiding-formatting)
+  * [Returning nothing instead of raising NotFound exception](#returning-nothing-instead-of-raising-notfound-exception)
+  * [Having a library that contains all utils](#having-a-library-that-contains-all-utils)
+    + [Conformance: Configurations for linting, etc](#conformance--configurations-for-linting--etc)
+  * [Conformance](#conformance)
+    + [Prettier](#prettier)
+    + [whitespace](#whitespace)
+      - [arrow-parens](#arrow-parens)
+        * [one var](#one-var)
+        * [[ref:eslint/rules/one-var](https://eslint.org/docs/rules/one-var)](#-ref-eslint-rules-one-var--https---eslintorg-docs-rules-one-var-)
+      - [comma-dangle](#comma-dangle)
+      - [implicit-arrow-linebreak](#implicit-arrow-linebreak)
+  * [Naming Convention](#naming-convention)
+  * [Naming Components](#naming-components)
+  * [Class vs `React.createClass` vs stateless](#class-vs--reactcreateclass--vs-stateless)
+  * [TypeScript](#typescript)
+  * [Names](#names)
+  * [Exports](#exports)
+  * [Components](#components)
+  * [Types](#types)
+  * [`null` and `undefined`](#-null--and--undefined-)
+  * [General Assumptions](#general-assumptions)
+  * [Flags](#flags)
+  * [Comments](#comments)
+  * [Strings](#strings)
+  * [When to use `any`](#when-to-use--any-)
+  * [Diagnostic Messages](#diagnostic-messages)
+  * [General Constructs](#general-constructs)
+  * [Style](#style)
+  * [Reference Specification](#reference-specification)
+    + [System UI](#system-ui)
+      - [Scale Objects](#scale-objects)
+      - [Scale Aliases](#scale-aliases)
+      - [Excluded Values](#excluded-values)
+    + [Keys](#keys)
+      - [Space](#space)
+    + [Breakpoints](#breakpoints)
+      - [Media Queries](#media-queries)
+    + [Key Reference](#key-reference)
+    + [Prior Art](#prior-art)
+
+</details>
 
 
 ## abstract
@@ -27,6 +104,8 @@
 
 
 ## motivation
+
+> State is the root of all revenue.
 
 User interface development tools are very powerful. They can be used to construct large and complex user interfaces, with only a relatively small amount of code written by an application developer. And yet, despite the power of such tools and the relatively small amount of code that is written, user interface software often has the following characteristics:
 
@@ -41,16 +120,25 @@ Despite the obvious problems associated with user interface development, **littl
 
 ### Principles for Transactions
 
-[UX/UI] Manage transaction wait time. Clarify blockchain specific times and manage user’s wait in various phases and feedback. <br>
-[UX/UI] Within the context of an individual, adapt to progressively increase/decrease the amount of new lingo and specific concepts that they need to learn and are exposed to. never combine expert-level blockchain-specific lingo with the need-to-know basics when acting within the same context of an individual; create tiers of knowledge levels. You can show an expert the basics, but never the other way around. <br>
-[UX/UI] Use a consistent visual language to dictate addresses. use human-readable deterministic visual representation of the hash (i.e. Identicons, Blockies et al.) when possible. allow users to expand the full address/hash and copy. <br>
-[UX/UI] Apply relevance to interrupting messages only for information relevant to the current user. <br>
-[UX/UI] Clarify which data comes from the blockchain and which doesn’t. <br>
-[UX/UI] Types of transactions i.e. value transfers, function calls, contract generating. <br>
-[UX/UI] When a blockchain event aborts or otherwise fails to complete as expected, the fallback must remain functional with resulting blockchain state clear. <br>
-[UX/UI] Allow users to subscribe-to, unsubscribe-from or temporarily mute certain events. <br>
-[UX/UI] Errors MUST populate back to the user.
-[UX/UI] Budget performance and response time so that stallouts or failovers can be approximated in worse-case
+✅ [UX/UI] Manage transaction wait time. Clarify blockchain specific times and manage user’s wait in various phases and feedback. <br>
+
+✅ [UX/UI] Within the context of an individual, adapt to progressively increase/decrease the amount of new lingo and specific concepts that they need to learn and are exposed to. never combine expert-level blockchain-specific lingo with the need-to-know basics when acting within the same context of an individual; create tiers of knowledge levels. You can show an expert the basics, but never the other way around. <br>
+
+✅ [UX/UI] Use a consistent visual language to dictate addresses. use human-readable deterministic visual representation of the hash (i.e. Identicons, Blockies et al.) when possible. allow users to expand the full address/hash and copy. <br>
+
+✅ [UX/UI] Apply relevance to interrupting messages only for information relevant to the current user. <br>
+
+✅ [UX/UI] Clarify which data comes from the blockchain and which doesn’t. <br>
+
+✅ [UX/UI] Types of transactions i.e. value transfers, function calls, contract generating. <br>
+
+✅ [UX/UI] When a blockchain event aborts or otherwise fails to complete as expected, the fallback must remain functional with resulting blockchain state clear. <br>
+
+✅ [UX/UI] Allow users to subscribe-to, unsubscribe-from or temporarily mute certain events. <br>
+
+✅ [UX/UI] Errors MUST populate back to the user. <br>
+
+✅ [UX/UI] Budget performance and response time so that stallouts or failovers can be approximated in worse-case
 
 
 #### Example: Bad UI/UX can cost big
