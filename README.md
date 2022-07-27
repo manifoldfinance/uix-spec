@@ -32,7 +32,7 @@
       - [Bad Color Aliasing](#bad-color-aliasing)
   * [Why Color Alias Matters](#why-color-alias-matters)
       - [Good Color Alias](#good-color-alias)
-  * [Choosing semantic color cales](#choosing-semantic-color-cales)
+  * [Choosing semantic color cales](#choosing-semantic-color-scales)
     + [Structure](#structure)
       - [Feature folders](#feature-folders)
     + [[The principle](https://kentcdodds.com/blog/colocation#the-principle)](#-the-principle--https---kentcdoddscom-blog-colocation-the-principle-)
@@ -272,7 +272,7 @@ const { styled } = createCss({
 ```
 -->
 
-## Choosing semantic color cales
+## Choosing semantic color scales
 
 For most projects, you will need colors to communicate semantic meaning. Here are some common pairings that work well in Western culture.
 
